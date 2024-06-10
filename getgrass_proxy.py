@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import random
 import signal
@@ -87,7 +88,7 @@ async def shutdown(loop, signal=None):
     logger.info("All tasks cancelled, stopping loop")
     loop.stop()
 
-async def main():
+async def main(num_slices, slice_to_run):
     try:
         with open('proxy-list.txt', 'r') as file:
             http_proxy = file.readlines()
@@ -95,10 +96,6 @@ async def main():
             http_proxy = [proxy.strip() for proxy in http_proxy if proxy.strip()]
             if not http_proxy:
                 raise ValueError("No proxies found in proxy-list.txt")
-
-        # Prompt the user for input
-        num_slices = int(input("Enter the number of slices you want to split the proxy list into: "))
-        slice_to_run = int(input(f"Enter the slice number to run (1 to {num_slices}): "))
 
         # Select proxies based on the user input
         selected_proxies = [proxy for i, proxy in enumerate(http_proxy) if (i % num_slices) + 1 == slice_to_run]
@@ -123,7 +120,13 @@ async def main():
         logger.error(f"An error occurred: {e}")
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="WebSocket Client with Proxy Support")
+    parser.add_argument('-s', '--slices', type=int, required=True, help="Number of slices to split the proxy list into")
+    parser.add_argument('-t', '--target', type=int, required=True, help="Slice number to run")
+
+    args = parser.parse_args()
+
     try:
-        asyncio.run(main())
+        asyncio.run(main(args.slices, args.target))
     except (KeyboardInterrupt, SystemExit):
         logger.info("Program terminated by user.")
