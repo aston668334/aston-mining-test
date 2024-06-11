@@ -93,7 +93,7 @@ async def shutdown(loop, signal=None):
 
 async def main(num_slices, slice_to_run):
     try:
-        with open('proxy-list.txt', 'r') as file:
+        with open('good-grass-proxy-list.txt', 'r') as file:
             http_proxy = file.readlines()
             # Remove any leading or trailing whitespace from each line
             http_proxy = [proxy.strip() for proxy in http_proxy if proxy.strip()]
@@ -118,7 +118,7 @@ async def main(num_slices, slice_to_run):
         await asyncio.gather(*tasks)
 
     except FileNotFoundError:
-        logger.error("proxy-list.txt not found. Please make sure the file exists.")
+        logger.error("good-grass-proxy-list.txt not found. Please make sure the file exists.")
     except Exception as e:
         logger.error(f"An error occurred: {e}")
 
