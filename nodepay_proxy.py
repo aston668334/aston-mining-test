@@ -137,12 +137,12 @@ async def shutdown(loop, signal=None):
 
 async def main(num_slices, slice_to_run):
     try:
-        with open('proxy-list.txt', 'r') as file:
+        with open('good-nodepay-proxy-list.txt', 'r') as file:
             http_proxy = file.readlines()
             # Remove any leading or trailing whitespace from each line
             http_proxy = [proxy.strip() for proxy in http_proxy if proxy.strip()]
             if not http_proxy:
-                raise ValueError("No proxies found in proxy-list.txt")
+                raise ValueError("No proxies found in good-nodepay-proxy-list.txt")
 
         # Select proxies based on the user input
         selected_proxies = [proxy for i, proxy in enumerate(http_proxy) if (i % num_slices) + 1 == slice_to_run]

@@ -106,16 +106,16 @@ async def test_proxies():
         proxies = file.readlines()
         proxies = [proxy.strip() for proxy in proxies if proxy.strip()]
 
-    # tasks = []
-    # for proxy in proxies:
-    #     tasks.append(connect_to_wss(proxy, grass_userid,semaphore))
+    tasks = []
+    for proxy in proxies:
+        tasks.append(connect_to_wss(proxy, grass_userid,semaphore))
     
-    # results = await asyncio.gather(*tasks)
-    # good_proxies = [proxy for proxy in results if proxy]
+    results = await asyncio.gather(*tasks)
+    good_proxies = [proxy for proxy in results if proxy]
     
-    # with open('good-grass-proxy-list.txt', 'w') as good_proxy_file:
-    #     for proxy in good_proxies:
-    #         good_proxy_file.write(proxy + '\n')
+    with open('good-grass-proxy-list.txt', 'w') as good_proxy_file:
+        for proxy in good_proxies:
+            good_proxy_file.write(proxy + '\n')
 
 
     tasks = []
