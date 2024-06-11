@@ -9,6 +9,9 @@ import uuid
 from loguru import logger
 from websockets_proxy import Proxy, proxy_connect
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 grass_userid = os.getenv("GRASS_USERID")
 
