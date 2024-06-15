@@ -131,4 +131,50 @@ async def test_proxies():
 
 if __name__ == '__main__':
     # Run the coroutine in an event loop
+    n =100000
+    # Filter and format the proxies
+    filtered_proxies = []
+
+    with open('../PROXY-List/http.txt', 'r') as file:
+        lines = file.readlines()
+
+    for line in lines[:n]:
+        ip, port = line.strip().split(':')
+        filtered_proxies.append(f'http://{ip}:{port}')
+
+    with open('../PROXY-List/socks4.txt', 'r') as file:
+        lines = file.readlines()
+
+    for line in lines[:n]:
+        ip, port = line.strip().split(':')
+        filtered_proxies.append(f'socks4://{ip}:{port}')
+
+
+    # Read the contents of http.txt
+    with open('../PROXY-List/socks5.txt', 'r') as file:
+        lines = file.readlines()
+
+    for line in lines[:n]:
+        ip, port = line.strip().split(':')
+        filtered_proxies.append(f'socks5://{ip}:{port}')
+
+    # Read the contents of http.txt
+    with open('./good-grass-proxy-list-filterd.txt', 'r') as file:
+        lines = file.readlines()
+    for line in lines:
+        filtered_proxies.append(line)
+
+    # Read the contents of http.txt
+    with open('./good-nodepay-proxy-list.txt', 'r') as file:
+        lines = file.readlines()
+    for line in lines:
+        filtered_proxies.append(line)
+
+
+    # Write the filtered proxies to proxy-list.txt
+    with open('proxy-list.txt', 'w') as file:
+        for proxy in filtered_proxies:
+            file.write(proxy + '\n')
+
+    print("Filtered proxies have been written to proxy-list.txt")
     asyncio.run(test_proxies())
