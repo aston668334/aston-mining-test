@@ -162,15 +162,15 @@ if __name__ == '__main__':
     with open('./good-grass-proxy-list-filterd.txt', 'r') as file:
         lines = file.readlines()
     for line in lines:
-        filtered_proxies.append(line)
+        filtered_proxies.append(line.strip())
 
     # Read the contents of http.txt
     with open('./good-nodepay-proxy-list.txt', 'r') as file:
         lines = file.readlines()
     for line in lines:
-        filtered_proxies.append(line)
+        filtered_proxies.append(line.strip())
 
-
+    filtered_proxies = list(dict.fromkeys(filtered_proxies))
     # Write the filtered proxies to proxy-list.txt
     with open('proxy-list.txt', 'w') as file:
         for proxy in filtered_proxies:

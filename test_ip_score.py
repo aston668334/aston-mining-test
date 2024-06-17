@@ -27,7 +27,7 @@ def filter_proxies(proxy_list, bad_ip_list):
     return filtered_proxies
 
 if __name__ == "__main__":
-    max_page = 500
+    max_page = 50
     once_per_request = 100
     API_KEY = os.getenv("API_KEY")
         # Define the CSV file name
