@@ -60,11 +60,6 @@ if __name__ == "__main__":
     with open('bad_ip.txt', 'w') as bad_ip_file:
         for bad_ip in bad_ip_list:
             bad_ip_file.write(bad_ip + '\n')
-
-    # Write the bad IPs to bad_ip.txt
-    with open('bad_ip.txt', 'w') as bad_ip_file:
-        for bad_ip in bad_ip_list:
-            bad_ip_file.write(bad_ip + '\n')
             
     # Read the IPs back from the file
     with open('bad_ip.txt', 'r') as bad_ip_file:
@@ -72,7 +67,6 @@ if __name__ == "__main__":
 
     # Remove duplicates by converting to a set, then back to a list
     unique_ips = list(set(ips))
-
     # Sort the list to maintain a consistent order (optional)
     unique_ips.sort()
 
