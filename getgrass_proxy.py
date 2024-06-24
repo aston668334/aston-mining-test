@@ -90,7 +90,7 @@ async def shutdown(loop, signal=None):
 
 async def main(num_slices, slice_to_run):
     try:
-        with open('good-grass-proxy-list.txt', 'r') as file:
+        with open('good-grass-proxy-list-filterd.txt', 'r') as file:
             http_proxy = file.readlines()
             # Remove any leading or trailing whitespace from each line
             http_proxy = [proxy.strip() for proxy in http_proxy if proxy.strip()]
