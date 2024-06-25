@@ -66,7 +66,7 @@ async def connect_socket_proxy(http_proxy,semaphore):
         browser_id = str(uuid.uuid3(uuid.NAMESPACE_DNS, http_proxy))
         logger.info(f"Browser ID: {browser_id}")
 
-        retries = 0
+        retries = 3
 
         try:
             proxy = Proxy.from_url(http_proxy)
