@@ -48,7 +48,7 @@ async def connect_to_wss(http_proxy, user_id, semaphore):
                 response = await websocket.recv()
                 message = json.loads(response)
                 logger.info(message)
-                if message.get("action") == "AUTH":  # Checking if the action is "AUTH"
+                if (message.get("action") == "AUTH") or (message.get("action") == "PONG") or (message.get("action") == "PING"):  # Checking if the action is "AUTH"
                     await websocket.close()
                     return http_proxy  # Return proxy if it's considered a good proxy based on "AUTH" action
         except asyncio.CancelledError:
@@ -66,8 +66,6 @@ async def connect_socket_proxy(http_proxy,semaphore):
         browser_id = str(uuid.uuid3(uuid.NAMESPACE_DNS, http_proxy))
         logger.info(f"Browser ID: {browser_id}")
 
-        retries = 0
-
         try:
             proxy = Proxy.from_url(http_proxy)
             custom_headers = {
@@ -79,23 +77,24 @@ async def connect_socket_proxy(http_proxy,semaphore):
             async with proxy_connect(WEBSOCKET_URL, proxy=proxy, ssl=ssl_context, server_hostname=SERVER_HOSTNAME,
                                         extra_headers=custom_headers) as websocket:
                 logger.info("Connected to WebSocket")
-                retries = 0
                 async for message in websocket:
                     data = json.loads(message)
-
-                    if data["action"] == "AUTH":
+                    if (data["action"] == "AUTH") or (data["action"] == "PONG") or (data["action"] == "PING") :
+                        await websocket.close()
                         return http_proxy
 
 
         except websockets.exceptions.ConnectionClosedError as e:
             logger.error(f"Connection closed with error: {e.code} - {e.reason}")
+            return None
         except websockets.exceptions.ConnectionClosedOK:
             logger.info("Connection closed normally")
+            return None
         except Exception as e:
             logger.error(f"Connection error: {e}")
-            retries += 1
-            logger.info(f"Retrying in {10 / 1000} seconds...")
-            await asyncio.sleep(10 / 1000)
+            return None
+        return None  # Return None if not a good proxy
+        
 
 
 async def test_proxies():
@@ -106,16 +105,16 @@ async def test_proxies():
         proxies = file.readlines()
         proxies = [proxy.strip() for proxy in proxies if proxy.strip()]
 
-    tasks = []
-    for proxy in proxies:
-        tasks.append(connect_to_wss(proxy, grass_userid,semaphore))
+    # tasks = []
+    # for proxy in proxies:
+    #     tasks.append(connect_to_wss(proxy, grass_userid,semaphore))
     
-    results = await asyncio.gather(*tasks)
-    good_proxies = [proxy for proxy in results if proxy]
+    # results = await asyncio.gather(*tasks)
+    # good_proxies = [proxy for proxy in results if proxy]
     
-    with open('good-grass-proxy-list.txt', 'w') as good_proxy_file:
-        for proxy in good_proxies:
-            good_proxy_file.write(proxy + '\n')
+    # with open('good-grass-proxy-list.txt', 'w') as good_proxy_file:
+    #     for proxy in good_proxies:
+    #         good_proxy_file.write(proxy + '\n')
 
 
     tasks = []
