@@ -69,7 +69,7 @@ async def connect_socket_proxy(http_proxy,semaphore):
         try:
             proxy = Proxy.from_url(http_proxy)
             custom_headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15"
             }
             ssl_context = ssl.create_default_context()
             ssl_context.check_hostname = False
@@ -105,16 +105,16 @@ async def test_proxies():
         proxies = file.readlines()
         proxies = [proxy.strip() for proxy in proxies if proxy.strip()]
 
-    # tasks = []
-    # for proxy in proxies:
-    #     tasks.append(connect_to_wss(proxy, grass_userid,semaphore))
+    tasks = []
+    for proxy in proxies:
+        tasks.append(connect_to_wss(proxy, grass_userid,semaphore))
     
-    # results = await asyncio.gather(*tasks)
-    # good_proxies = [proxy for proxy in results if proxy]
+    results = await asyncio.gather(*tasks)
+    good_proxies = [proxy for proxy in results if proxy]
     
-    # with open('good-grass-proxy-list.txt', 'w') as good_proxy_file:
-    #     for proxy in good_proxies:
-    #         good_proxy_file.write(proxy + '\n')
+    with open('good-grass-proxy-list.txt', 'w') as good_proxy_file:
+        for proxy in good_proxies:
+            good_proxy_file.write(proxy + '\n')
 
 
     tasks = []
